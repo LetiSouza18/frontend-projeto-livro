@@ -1,6 +1,7 @@
 import {useEffect , useState} from 'react'
 import Header from '../../components/Header/Header'
 import "./index.scss"
+
 import SubmenuLivros from '../../components/SubmenuLivros/SubmenuLivros'
 import { useParams } from 'react-router-dom'
 import { LivrosService } from '../../api/LivrosService'
@@ -26,7 +27,7 @@ const LivrosEdicao = () => {
     if(livro.id!=undefined && livro.id!='' && livro.titulo!=undefined && livro.titulo!='' && livro.num_paginas!=undefined && livro.num_paginas!='' && livro.isbn !=undefined && livro.isbn !='' && livro.editora !=undefined && livro.editora !=''){
       try {
         const response = await LivrosService.updateLivro(Number(livro.id),body);
-        alert(response.data.message);
+        alert('Livro atualizado com sucesso!');
       } catch (error) {
         alert(error.response.data.message);
       }

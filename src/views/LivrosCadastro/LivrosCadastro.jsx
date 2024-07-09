@@ -7,11 +7,21 @@ import { LivrosService } from '../../api/LivrosService'
 const LivrosCadastro = () => {
 
   async function getLivro(){
-    const {data} = await LivrosService.getLivro(livroId);
-    setLivro(data)
+    try {
+      const { data } = await LivrosService.getLivro(livro.id);
+      setLivro(data);
+    } catch (error) {
+      alert('Erro ao buscar livro: ' + (error.response ? error.response.data.message : error.message));
+    }
   }
   
-  const [livro, setLivro] = useState([])
+  const [livro, setLivro] = useState({
+    id: '',
+    titulo: '',
+    num_paginas: '',
+    isbn: '',
+    editora: ''
+  });
 
   async function createLivro(){
     const body = {
@@ -24,14 +34,14 @@ const LivrosCadastro = () => {
       if(livro.id!=undefined && livro.id!='' && livro.titulo!=undefined && livro.titulo!='' && livro.num_paginas!=undefined && livro.num_paginas!='' && livro.isbn !=undefined && livro.isbn !='' && livro.editora !=undefined && livro.editora !=''){
         try {
           const response = await LivrosService.createLivro(body);
-          alert(response.data.message);
+          alert('Livro cadastrado com sucesso!');
           document.getElementById('formulario').reset();
           getLivro(); 
-        } catch (error) {
+        } 
+        catch (error) {
           alert(error.response.data.message)
         }
     }
-
   }
 
   return (
@@ -40,7 +50,7 @@ const LivrosCadastro = () => {
       <div className='livrosCadastro'>
         <h1>Cadastro de Livros</h1>
         <div>          
-          <form id="formulario">
+          <form id="formulario" onSubmit={(e) => { e.preventDefault()}}>
           <div className='form-group'>
             <label>Id</label>
             <input type="text" id='id' required onChange={(event)=>{ setLivro({...livro, id: event.target.value})}} ></input>
@@ -70,6 +80,8 @@ const LivrosCadastro = () => {
         </div>
     </div>
   </>)
+
+  
   
 }
 
